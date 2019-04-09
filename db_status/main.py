@@ -1,11 +1,16 @@
 
-import sys
+import sys, os
+from pathlib import Path
 
 import click
 import clint
 import psycopg2
 
 from configparser import ConfigParser
+
+
+APP_NAME = 'db_status'
+CFG = os.path.join(click.get_app_dir(APP_NAME), 'dbstatus.ini')
 
 
 @click.group()
@@ -18,7 +23,7 @@ def main():
 def check(uri):
     if uri is None:
         config = ConfigParser()
-        config.read('config.ini')
+        config.read(CFG)
         if not config['DatabaseURI']['uri']:
             click.echo(
                 '\nNo DatabaseURI\n' \
@@ -28,10 +33,27 @@ def check(uri):
             sys.exit(1)
         else:
             uri = config['DatabaseURI']['uri']
-    click.echo('health check :: success')
+    click.secho('health check :: success', fg='cyan', bold=True)
+
+
+@main.command()
+def createconf():
+    if not os.path.exists(CFG):
+        Path(CFG).touch()
+        with open(CFG, 'w') as f:
+            f.write('[DatabaseURI]\r\nuri =')
+    else:
+        click.echo('config file already exists')
+
 
 @main.command()
 @click.argument('uri')
-def config(uri):
-    click.echo('config writer :: success')
+def set_url(uri):
+    config = ConfigParser()
+    if not os.path.exists(CFG):
+        createconf()
+    config.read(CFG)
+    config['DatabaseURI']['uri'] = uri
+    with open(CFG, 'w') as configfile:
+        config.write(configfile)
 
