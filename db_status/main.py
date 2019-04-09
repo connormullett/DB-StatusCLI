@@ -28,7 +28,7 @@ def check(uri):
             click.echo(
                 '\nNo DatabaseURI\n' \
                 'use: dbstat config DATABASEURI or \n' \
-                'use: dbstat check--uri DATABASEURI\n'
+                'use: dbstat check --uri/-u DATABASEURI\n'
             )
             sys.exit(1)
         else:
@@ -56,4 +56,16 @@ def set_url(uri):
     config['DatabaseURI']['uri'] = uri
     with open(CFG, 'w') as configfile:
         config.write(configfile)
+
+
+@main.command()
+def clear_url():
+    config = ConfigParser()
+    if not os.path.exists(CFG):
+        click.echo('config file does not exist')
+        sys.exit(0)
+    config.read(CFG)
+    config['DatabaseURI']['uri'] = ''
+    with open(CFG, 'w') as f:
+        config.write(f)
 
