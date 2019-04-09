@@ -22,6 +22,6 @@ before executing tasks.
  - Not Started :: Execute SQL from file
 
 ## TODO
-[ ]  Shell for executing SQL commands for any flavor
-[ ]  Load file and execute full scripts
+[ ] Shell for executing SQL commands for any flavor  
+[ ] Load file and execute full scripts  
 
