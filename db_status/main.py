@@ -4,8 +4,8 @@ from pathlib import Path
 
 import click
 import clint
-import psycopg2
 
+from .connect import ConnectionFactory
 from configparser import ConfigParser
 
 
@@ -33,7 +33,16 @@ def check(uri):
             sys.exit(1)
         else:
             uri = config['DatabaseURI']['uri']
-    click.secho('health check :: success', fg='cyan', bold=True)
+
+    # perform connection
+    con = ConnectionFactory.create(uri)
+    rv = con.test()
+
+    if not rv:
+        click.secho('health check :: success', fg='cyan', bold=True)
+    else:
+        click.secho('health check :: failed', fg='red', bold=True)
+        click.echo(rv)
 
 
 @main.command()
