@@ -1,5 +1,4 @@
 
-from urllib.parse import urlparse
 import psycopg2
 
 
