@@ -1,19 +1,35 @@
 # shell.py
 
-import sys, os
+import sys, os, traceback
 from .connect import Connection
 
 
-def print_help():
-    pass
-
-
-def quit():
+def quit(*args, **kwargs):
+    '''exit the terminal'''
     sys.exit(0)
 
 
-def clear():
+def clear(*args, **kwargs):
+    '''clear the terminal screen'''
     os.system('clear')
+
+
+def get_uri(*args, **kwargs):
+    '''
+    returns the URI of the database
+    currently connected to
+    '''
+    sys.stdout.write(f'{kwargs.get("uri")}\n')
+
+
+def print_help():
+    '''print commands with descriptions to terminal'''
+    sys.stdout.write(
+        f' /h :: {print_help.__doc__}\n' \
+        f' /q :: {quit.__doc__}\n' \
+        f' /l :: {clear.__doc__}\n' \
+        f' /u :: {get_uri.__doc__}\n' \
+    )
 
 
 # list of commands linked to functions
@@ -21,9 +37,16 @@ def clear():
 _commands = {
     'h': print_help,
     'q': quit,
-    'l': clear
+    'l': clear,
+    'u': get_uri
 }
 
+def pp(rows):
+    for row in rows:
+        for i in row:
+            sys.stdout.write(f'{i}  ')
+        sys.stdout.write('\n')
+    sys.stdout.write('\n')
 
 def shell(conn: Connection):
     '''
@@ -39,7 +62,7 @@ def shell(conn: Connection):
     a rollback transaction
     to undo damage to DB
     '''
-
+    uri = conn.uri
     conn = conn.connect(conn.uri)
 
     cur = conn.cursor()
@@ -51,7 +74,7 @@ def shell(conn: Connection):
         if c.startswith('/'):
             if c[1] in _commands:
                 command = _commands.get(c[1], None)
-                command()
+                command(uri=uri)
 
         else:
             try:
@@ -59,9 +82,10 @@ def shell(conn: Connection):
                 conn.commit()
 
                 rows = cur.fetchall()
-                for row in rows:
-                    sys.stdout.write(f'{row}\n')
+
+                data = pp(rows)
             except Exception as e:
+                traceback.print_tb(e.__traceback__)
                 sys.stdout.write(f'{e}\n')
                 conn.rollback()
 
