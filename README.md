@@ -4,7 +4,16 @@
 Simple Database healthchecker using Click to verify connections
 before executing tasks.
 
+# Requires
+- Python3 (shady compatibility with Python2)
+- Git
+- Databases to connect to
+
 # Installation
+
+## Regular Installation
+- Package is not hosted on Pypi, use developer install
+  without a virtual environment to use it globally
 
 ## Developer Install
  - Clone or fork the repository
@@ -27,10 +36,12 @@ before executing tasks.
  - `dbstat sql-shell` - start shell for executing sql queries. Uses the URI in config
    file or what is specified with `-u`/`--uri`
 
-## Features
- - In Progress :: Execute SQL from file
-
 ## TODO
 - [x] Shell for executing SQL commands for any flavor
 - [ ] Load file and execute full scripts
+- [ ] Change URI in Shell
+
+## Progress
+ - In Progress :: Execute SQL from file
+ - Not Started :: Change URI in shell
 
