@@ -4,8 +4,9 @@ from pathlib import Path
 
 import click
 import clint
-import psycopg2
 
+from .connect import ConnectionFactory
+from .shell import shell
 from configparser import ConfigParser
 
 
@@ -21,6 +22,15 @@ def main():
 @main.command()
 @click.option('--uri', '-u', help='Database URI')
 def check(uri):
+    '''
+    Checks if uri is supplied as option
+    if not, opens config file and checks
+    if the URI is set.
+    exits if URI is not supplied and --uri/-u
+    was not supplied
+    returns a status (success/failed) after
+    trying to connect
+    '''
     if uri is None:
         config = ConfigParser()
         config.read(CFG)
@@ -33,7 +43,16 @@ def check(uri):
             sys.exit(1)
         else:
             uri = config['DatabaseURI']['uri']
-    click.secho('health check :: success', fg='cyan', bold=True)
+
+    # perform connection
+    con = ConnectionFactory.create(uri)
+    rv = con.test()
+
+    if not rv:
+        click.secho('health check :: success', fg='cyan', bold=True)
+    else:
+        click.secho('health check :: failed', fg='red', bold=True)
+        click.echo(rv)
 
 
 @main.command()
@@ -68,4 +87,25 @@ def clear_url():
     config['DatabaseURI']['uri'] = ''
     with open(CFG, 'w') as f:
         config.write(f)
+
+
+@main.command()
+@click.option('-u', '--uri', help='Database URI to execute commands on')
+def sql_shell(uri):
+    if uri is None:
+        config = ConfigParser()
+        config.read(CFG)
+        if not config['DatabaseURI']['uri']:
+            click.echo(
+                '\nNo DatabaseURI\n' \
+                'use: dbstat config DATABASEURI or \n' \
+                'use: dbstat check --uri/-u DATABASEURI\n'
+            )
+            sys.exit(1)
+        else:
+            uri = config['DatabaseURI']['uri']
+
+    conn = ConnectionFactory.create(uri)
+    if not conn.test():
+        shell(conn)
 
