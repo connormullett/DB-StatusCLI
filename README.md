@@ -12,8 +12,9 @@ before executing tasks.
 # Installation
 
 ## Regular Installation
-- Package is not hosted on Pypi, use developer install
-  without a virtual environment to use it globally
+- Package is not hosted on Pypi yet, use developer install
+  without a virtual environment to use it globally.
+  Package will soon be pip installable
 
 ## Developer Install
  - Clone or fork the repository
@@ -37,11 +38,17 @@ before executing tasks.
    file or what is specified with `-u`/`--uri`
 
 ## TODO
+- [x] Health check database (verify connection is made)
 - [x] Shell for executing SQL commands for any flavor
 - [ ] Load file and execute full scripts
 - [ ] Change URI in Shell
+- [ ] Command History
+- [ ] Execute query from CLI without going into shell
+- [ ] Detailed debugging for health check fails
 
 ## Progress
- - In Progress :: Execute SQL from file
+ - In Progress :: More Shell Commands
+ - Not Started :: Execute SQL from file
  - Not Started :: Change URI in shell
+ - Not Started :: Command History
 
