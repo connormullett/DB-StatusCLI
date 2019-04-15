@@ -37,11 +37,14 @@ before executing tasks.
    file or what is specified with `-u`/`--uri`
 
 ## TODO
-- [x] Shell for executing SQL commands for any flavor
+- [ ] Shell for executing SQL commands for any flavor
 - [ ] Load file and execute full scripts
 - [ ] Change URI in Shell
+- [ ] Command History
+- [ ] Execute query from CLI without going into shell
 
 ## Progress
  - In Progress :: Execute SQL from file
  - Not Started :: Change URI in shell
+ - Not Started :: Command History
 

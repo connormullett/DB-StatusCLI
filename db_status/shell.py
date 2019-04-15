@@ -81,9 +81,15 @@ def shell(conn: Connection):
                 cur.execute(c)
                 conn.commit()
 
-                rows = cur.fetchall()
+                if cur.description:
+                    colnames = [desc[0] for desc in cur.description]
+                    for column in colnames:
+                        sys.stdout.write(f'{column} ')
+                    sys.stdout.write('\n')
 
-                data = pp(rows)
+                    rows = cur.fetchall()
+
+                    pp(rows)
             except Exception as e:
                 traceback.print_tb(e.__traceback__)
                 sys.stdout.write(f'{e}\n')
