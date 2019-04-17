@@ -2,5 +2,6 @@ args==0.1.0
 Click==7.0
 clint==0.5.1
 configparser==3.7.4
--e git+git@github.com:connormullett/DB-StatusCLI.git@039da9168eb1e9b76c0d0e4a3439f9b3ef8faf7a#egg=db_status
+-e git+git@github.com:connormullett/DB-StatusCLI.git@4414d959acc22d199855b1b238e902bccac8615a#egg=db_status
 psycopg2-binary==2.8.1
+pyfiglet==0.8.post1
