@@ -8,7 +8,8 @@ setup(
         'args',
         'Click',
         'clint',
-        'psycopg2-binary'
+        'psycopg2-binary',
+        'pyfiglet'
     ],
     version='0.1.0',
     entry_points={

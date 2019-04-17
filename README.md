@@ -4,6 +4,13 @@
 Simple Database healthchecker using Click to verify connections
 before executing tasks.
 
+DbStatus DOES NOT connect to the server, only the database. Accessing
+other databases is doable however you can not view them without knowing the URI
+
+Example SQL Scripts are available in the `sqlscripts` directory to mess around with
+
+Currently only works with PostgreSQL, other server compatibility coming soon
+
 # Requires
 - Python3 (shady compatibility with Python2)
 - Git
@@ -39,16 +46,16 @@ before executing tasks.
 
 ## TODO
 - [x] Health check database (verify connection is made)
-- [x] Shell for executing SQL commands for any flavor
-- [ ] Load file and execute full scripts
+- [x] Shell for executing SQL queries
+- [ ] Check URI from CLI
+- [x] Load file and execute full scripts
 - [ ] Change URI in Shell
 - [ ] Command History
 - [ ] Execute query from CLI without going into shell
-- [ ] Detailed debugging for health check fails
+- [x] Detailed debugging for health check fails
 
 ## Progress
  - In Progress :: More Shell Commands
- - Not Started :: Execute SQL from file
  - Not Started :: Change URI in shell
  - Not Started :: Command History
 
