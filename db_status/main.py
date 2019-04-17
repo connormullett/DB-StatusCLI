@@ -1,5 +1,9 @@
 
 import sys, os
+
+if sys.version_info[0] < 3:
+    raise Exception('DBStatus requires Python3')
+
 from pathlib import Path
 
 import click

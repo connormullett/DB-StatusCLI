@@ -67,10 +67,12 @@ def shell(conn: Connection):
     a rollback transaction
     to undo damage to DB
     '''
+    # uri for /u
     uri = conn.uri
-    conn = conn.connect(conn.uri)
+    # simplify connection object
+    connection = conn.connect(conn.uri)
 
-    cur = conn.cursor()
+    cur = connection.cursor()
 
     while True:
         sys.stdout.write('> ')
@@ -79,20 +81,20 @@ def shell(conn: Connection):
         if c.startswith('/'):
             if c[1] in _commands:
                 command = _commands.get(c[1], None)
-                command(uri=uri)
+                command(uri=conn.uri)
             if c[1].lower() == 'r':
-                # TODO: perform URI switch here
-                # should perform health check
-                # should change uri in conf file
-                # may need to add bool for if the uri
-                # was supplied through option or
-                # pulled from config file
-                pass
+                continue  # guard for this block
+                new_uri = c[3:]
+                conn.uri = new_uri
+                if conn.test():
+                    conn.uri = uri
+                else:
+                    connection = conn.connect(conn.uri)
 
         else:
             try:
                 cur.execute(c)
-                conn.commit()
+                connection.commit()
 
                 if cur.description:
                     colnames = [desc[0] for desc in cur.description]
@@ -106,5 +108,5 @@ def shell(conn: Connection):
             except Exception as e:
                 traceback.print_tb(e.__traceback__)
                 sys.stdout.write(f'{e}\n')
-                conn.rollback()
+                connection.rollback()
 
