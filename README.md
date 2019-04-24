@@ -47,7 +47,7 @@ Currently only works with PostgreSQL, other server compatibility coming soon
 ## TODO
 - [x] Health check database (verify connection is made)
 - [x] Shell for executing SQL queries
-- [ ] Check URI from CLI
+- [x] Check URI from CLI
 - [x] Load file and execute full scripts
 - [ ] Change URI in Shell
 - [ ] Command History
@@ -56,6 +56,7 @@ Currently only works with PostgreSQL, other server compatibility coming soon
 
 ## Progress
  - In Progress :: More Shell Commands
- - Not Started :: Change URI in shell
+ - Not Started :: Execute SQL from file
+ - In Progress :: Change URI in shell
  - Not Started :: Command History
 
