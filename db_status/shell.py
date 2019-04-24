@@ -1,6 +1,8 @@
 # shell.py
 
-import sys, os, traceback
+import sys
+import os
+import traceback
 from .connect import Connection
 
 
@@ -28,11 +30,11 @@ def change_uri(*args, **kwargs):
 def print_help(*args, **kwargs):
     '''print commands with descriptions to terminal'''
     sys.stdout.write(
-        f' /h :: {print_help.__doc__}\n' \
-        f' /q :: {quit.__doc__}\n' \
-        f' /l :: {clear.__doc__}\n' \
-        f' /u :: {get_uri.__doc__}\n' \
-        f' /r :: {change_uri.__doc__}\n' \
+        f' /h :: {print_help.__doc__}\n'
+        f' /q :: {quit.__doc__}\n'
+        f' /l :: {clear.__doc__}\n'
+        f' /u :: {get_uri.__doc__}\n'
+        f' /r :: {change_uri.__doc__}\n'
     )
 
 
@@ -46,12 +48,14 @@ _commands = {
     'r': change_uri
 }
 
+
 def pp(rows):
     for row in rows:
         for i in row:
             sys.stdout.write(f'{i}  ')
         sys.stdout.write('\n')
     sys.stdout.write('\n')
+
 
 def shell(conn: Connection):
     '''
@@ -84,6 +88,7 @@ def shell(conn: Connection):
                 command(uri=conn.uri)
             if c[1].lower() == 'r':
                 continue  # guard for this block
+                # below is changing the URI in shell
                 new_uri = c[3:]
                 conn.uri = new_uri
                 if conn.test():
@@ -109,4 +114,3 @@ def shell(conn: Connection):
                 traceback.print_tb(e.__traceback__)
                 sys.stdout.write(f'{e}\n')
                 connection.rollback()
-

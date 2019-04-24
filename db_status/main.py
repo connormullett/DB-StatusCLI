@@ -171,3 +171,30 @@ def script(f, uri):
         cur = connection.cursor()
         click.echo(cur.execute(query))
         connection.commit()
+
+
+@main.command()
+@click.argument('query')
+@click.option('-u', '--uri', help='New URI')
+def query(query, uri):
+    if not uri:
+        config = ConfigParser()
+        config.read(CFG)
+        if not config['DatabaseURI']['uri']:
+            click.echo(
+                'No DatabaseURI\n'
+                'use: dbstat config DATABASEURI or \n'
+                'use: dbstat check --uri/-u DATABASEURI\n'
+            )
+        uri = config['DatabaseURI']['uri']
+        conn = ConnectionFactory.create(uri)
+        connection = conn.connect(conn.uri)
+        if not conn.test():
+            cur = connection.cursor()
+            cur.execute(query)
+            try:
+                click.echo(cur.fetchone())
+                # fetchone does not always return a value
+            except Exception as e:
+                pass
+            connection.commit()
