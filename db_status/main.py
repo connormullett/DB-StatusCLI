@@ -1,18 +1,16 @@
 
-import sys, os
+from configparser import ConfigParser
+from .shell import shell
+from .connect import ConnectionFactory
+from pyfiglet import print_figlet
+import clint
+import click
+from pathlib import Path
+import sys
+import os
 
 if sys.version_info[0] < 3:
     raise Exception('DBStatus requires Python3')
-
-from pathlib import Path
-
-import click
-import clint
-
-from pyfiglet import print_figlet
-from .connect import ConnectionFactory
-from .shell import shell
-from configparser import ConfigParser
 
 
 APP_NAME = 'db_status'
@@ -21,8 +19,23 @@ CFG = os.path.join(click.get_app_dir(APP_NAME), 'dbstatus.ini')
 
 @click.group()
 def main():
-    colors = "51;255;255:"
-    print_figlet("DB-Status", font='slant', colors=colors)
+    pass
+    # colors = "51;255;255:"
+    # print_figlet("DB-Status", font='slant', colors=colors)
+
+
+@main.command()
+def get_uri():
+    '''
+    returns the URI in dbstatus.ini
+    '''
+    config = ConfigParser()
+    config.read(CFG)
+    if config['DatabaseURI']['uri']:
+        # returning click.echo() will make sure you dont
+        # have to call sys.exit()
+        return click.echo(config['DatabaseURI']['uri'])
+    return click.echo('No URI set')
 
 
 @main.command()
@@ -42,8 +55,8 @@ def check(uri):
         config.read(CFG)
         if not config['DatabaseURI']['uri']:
             click.echo(
-                '\nNo DatabaseURI\n' \
-                'use: dbstat config DATABASEURI or \n' \
+                '\nNo DatabaseURI\n'
+                'use: dbstat config DATABASEURI or \n'
                 'use: dbstat check --uri/-u DATABASEURI\n'
             )
             sys.exit(1)
@@ -118,8 +131,8 @@ def sql_shell(uri):
         config.read(CFG)
         if not config['DatabaseURI']['uri']:
             click.echo(
-                '\nNo DatabaseURI\n' \
-                'use: dbstat config DATABASEURI or \n' \
+                '\nNo DatabaseURI\n'
+                'use: dbstat config DATABASEURI or \n'
                 'use: dbstat check --uri/-u DATABASEURI\n'
             )
             sys.exit(1)
@@ -144,8 +157,8 @@ def script(f, uri):
         config.read(CFG)
         if not config['DatabaseURI']['uri']:
             click.echo(
-                'No DatabaseURI\n' \
-                'use: dbstat config DATABASEURI or \n' \
+                'No DatabaseURI\n'
+                'use: dbstat config DATABASEURI or \n'
                 'use: dbstat check --uri/-u DATABASEURI\n'
             )
         uri = config['DatabaseURI']['uri']
@@ -158,4 +171,3 @@ def script(f, uri):
         cur = connection.cursor()
         click.echo(cur.execute(query))
         connection.commit()
-

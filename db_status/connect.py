@@ -1,5 +1,7 @@
 
 import psycopg2
+import sqlite3
+import os
 
 
 class ConnectionFactory:
@@ -13,7 +15,11 @@ class Connection:
 
     def __init__(self, uri):
         self.uri = uri
-        self.connect = psycopg2.connect
+        # self.connect = psycopg2.connect
+        if os.path.exists(self.uri):
+            self.uri = sqlite3.connect
+        elif self.uri.startswith('postgres'):
+            self.connect = psycopg2.connect
 
     def test(self):
         '''
